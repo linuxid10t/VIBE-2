@@ -1,0 +1,20 @@
+# The C sources are edited and compiled on OS/2, where CRLF is the native
+# convention and the 1990s editors assume it. A file with bare LF line endings
+# looks to them like one enormous line -- json.c would be a single 26 KB line --
+# and their fixed line buffers overflow and crash on open. Open Watcom's IDE
+# dies on buf.c at 1.6 KB.
+#
+# -text rather than "text eol=crlf" on purpose: eol=crlf stores LF in the
+# repository and only converts on checkout, so a ZIP download or a copy out of
+# the web UI would still arrive LF-only. -text means the CRLF bytes are what is
+# actually committed, so every route to the target machine delivers them.
+*.c -text
+*.h -text
+
+# Host-side only, and both actively dislike CRLF: GNU make treats a trailing CR
+# as part of the recipe, and the test helpers never leave this machine. Pinned
+# so a clone with core.autocrlf=true does not break the build.
+Makefile  text eol=lf
+*.sh      text eol=lf
+*.py      text eol=lf
+*.md      text eol=lf

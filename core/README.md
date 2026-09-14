@@ -131,6 +131,22 @@ overflow in an earlier draft of `tools.c` that had mixed the two.
   recoverable; losing the conversation is not.
 - **No ask callback means deny.** Unprompted defaults must fail closed.
 
+## Line endings
+
+The `.c` and `.h` files are stored **CRLF**, enforced by `.gitattributes`.
+
+That is not cosmetic. OS/2's 1990s editors assume CRLF, and a file with bare LF
+looks to them like one enormous line -- `json.c` would be a single 26 KB line.
+Their fixed line buffers overflow and the editor dies on open, before it draws
+anything. Open Watcom's IDE crashes on `buf.c` at 1.6 KB.
+
+GCC, Clang and the target compilers all accept CRLF, so the host build is
+unaffected; the full suite passes either way.
+
+`Makefile`, the Python test helpers and the Markdown stay LF: GNU make treats a
+trailing CR as part of the recipe, and the rest never leaves the development
+machine.
+
 ## Notes for the target compilers
 
 - **509-char string literals.** C89 only requires that much and old compilers
