@@ -77,6 +77,19 @@ having a name. Renaming is mechanical if `vibe2` is preferred.
 - VisualAge C++ 3.0, Borland C++ 2.0 for OS/2, or Open Watcom V2
 - A machine on the LAN running llama.cpp, Ollama or LM Studio
 
+## Floppy image
+
+The complete source tree fits on a standard 1.44 MiB FAT12 floppy image. With
+`dosfstools` and `mtools` installed, create one with:
+
+```sh
+./scripts/make-floppy.sh                 # writes ./vibe-2.img
+./scripts/make-floppy.sh /tmp/vibe-2.img # choose another output path
+```
+
+Git metadata and the output image itself are excluded; source files, tests,
+documentation and other project dotfiles are included.
+
 ## Licence
 
 Apache 2.0, per `LICENSE`. The code here is original; HaiCode is MIT and none of
