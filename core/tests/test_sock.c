@@ -29,7 +29,7 @@ test_bad_arguments(void)
 {
     sock s;
 
-    sock_init(&s);
+    sock_reset(&s);
     OK(!sock_is_open(&s), "a fresh socket is closed");
 
     OK(sock_connect(&s, NULL, 80) != 0, "NULL host rejected");
@@ -46,7 +46,7 @@ test_resolve_failure(void)
 {
     sock s;
 
-    sock_init(&s);
+    sock_reset(&s);
     OK(sock_connect(&s, "no-such-host.invalid", 80) != 0,
        "unresolvable host fails");
     OK(strstr(s.err, "resolve") != NULL, "and says so");
@@ -58,7 +58,7 @@ test_connection_refused(int port)
 {
     sock s;
 
-    sock_init(&s);
+    sock_reset(&s);
     OK(sock_connect(&s, g_host, port) != 0, "closed port refuses");
     OK(s.err[0] != '\0', "with an error message");
     OK(!sock_is_open(&s), "and leaves nothing open");
@@ -73,7 +73,7 @@ test_roundtrip(int port)
     int   got;
     int   total = 0;
 
-    sock_init(&s);
+    sock_reset(&s);
     OK(sock_connect(&s, g_host, port) == 0, "connects to the echo server");
     OK(sock_is_open(&s), "socket reports open");
 
@@ -110,7 +110,7 @@ test_large_send(int port)
     for (i = 0; i < 200000; i++)
         buf_putc(&payload, (char)('a' + (i % 26)));
 
-    sock_init(&s);
+    sock_reset(&s);
     OK(sock_connect(&s, g_host, port) == 0, "connects for the large transfer");
     OK(sock_send_all(&s, payload.data, payload.len) == 0,
        "200 KB sent in full despite partial writes");
@@ -142,7 +142,7 @@ test_read_timeout(int port)
     char in[16];
     int  got;
 
-    sock_init(&s);
+    sock_reset(&s);
     OK(sock_connect(&s, g_host, port) == 0, "connects to the silent server");
     sock_set_timeout(&s, 300);
 
@@ -160,7 +160,7 @@ test_clean_eof(int port)
     sock s;
     char in[16];
 
-    sock_init(&s);
+    sock_reset(&s);
     OK(sock_connect(&s, g_host, port) == 0, "connects to the closing server");
     sock_set_timeout(&s, 2000);
     EQLONG(sock_recv_some(&s, in, sizeof(in)), 0,
@@ -177,7 +177,7 @@ test_transport_wiring(int port)
     int            total = 0;
     int            got;
 
-    sock_init(&s);
+    sock_reset(&s);
     sock_connect(&s, g_host, port);
     t = sock_transport(&s);
 

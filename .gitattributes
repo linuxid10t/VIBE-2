@@ -1,19 +1,17 @@
-# The C sources are edited and compiled on OS/2, where CRLF is the native
-# convention and the 1990s editors assume it. A file with bare LF line endings
-# looks to them like one enormous line -- json.c would be a single 26 KB line --
-# and their fixed line buffers overflow and crash on open. Open Watcom's IDE
-# dies on buf.c at 1.6 KB.
+# Line endings are left alone for the C sources: stored LF, checked out LF.
 #
-# -text rather than "text eol=crlf" on purpose: eol=crlf stores LF in the
-# repository and only converts on checkout, so a ZIP download or a copy out of
-# the web UI would still arrive LF-only. -text means the CRLF bytes are what is
-# actually committed, so every route to the target machine delivers them.
-*.c -text
-*.h -text
-
-# Host-side only, and both actively dislike CRLF: GNU make treats a trailing CR
-# as part of the recipe, and the test helpers never leave this machine. Pinned
-# so a clone with core.autocrlf=true does not break the build.
+# An earlier revision stored them CRLF on the theory that OS/2's editors need
+# it. They do not need it badly enough to be worth the risk: LF did not cause
+# the Open Watcom crash it was meant to fix, and shipping CRLF means any
+# transfer that also converts (ASCII-mode FTP, some file shares, git with
+# core.autocrlf) produces \r\r\n, which genuinely does break editors. LF is the
+# neutral choice -- every tool in the chain knows how to convert it exactly
+# once, and nothing converts it twice.
+#
+# Only the files that would actively break if a client converted them are
+# pinned, so a clone with core.autocrlf=true cannot damage the build: GNU make
+# treats a trailing CR as part of the recipe, and the shell and Python helpers
+# are executed directly.
 Makefile  text eol=lf
 *.sh      text eol=lf
 *.py      text eol=lf

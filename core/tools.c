@@ -512,7 +512,7 @@ typedef struct grep_state {
 } grep_state;
 
 static const char *
-str_find_fold(const char *hay, const char *needle, int fold)
+find_fold(const char *hay, const char *needle, int fold)
 {
     size_t nl;
 
@@ -557,7 +557,7 @@ grep_file(grep_state *g, const char *full, const char *shown)
             line[--len] = '\0';
         if (memchr(line, '\0', len) != NULL)
             continue;                       /* binary-ish line */
-        if (str_find_fold(line, g->needle, g->fold) == NULL)
+        if (find_fold(line, g->needle, g->fold) == NULL)
             continue;
         if (g->out->len < TOOL_MAX_OUTPUT) {
             char n[32];

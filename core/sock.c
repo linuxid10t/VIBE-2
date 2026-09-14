@@ -111,7 +111,7 @@ sock_startup(void)
 }
 
 void
-sock_init(sock *s)
+sock_reset(sock *s)
 {
     s->fd         = SOCK_INVALID;
     s->timeout_ms = SOCK_DEFAULT_TIMEOUT_MS;
@@ -282,7 +282,7 @@ sock_net_init(sock_net *n, const char *host, int port, long timeout_ms)
     }
     n->port       = port;
     n->timeout_ms = (timeout_ms > 0) ? timeout_ms : SOCK_DEFAULT_TIMEOUT_MS;
-    sock_init(&n->s);
+    sock_reset(&n->s);
 }
 
 static int

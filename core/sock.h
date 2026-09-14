@@ -40,7 +40,9 @@ typedef struct sock {
 /* Call once at startup. Returns 0 on success. Harmless to call twice. */
 int  sock_startup(void);
 
-void sock_init(sock *s);
+/* Named sock_reset, not sock_init: OS/2's TCP/IP toolkit already
+ * declares int sock_init(void), and the two cannot coexist. */
+void sock_reset(sock *s);
 /* Resolves and connects. Returns 0, or -1 with s->err set. */
 int  sock_connect(sock *s, const char *host, int port);
 void sock_close(sock *s);
